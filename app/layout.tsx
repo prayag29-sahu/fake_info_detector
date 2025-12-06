@@ -9,6 +9,7 @@ export const metadata = {
   description: "Detect fake content - text, image, video, url, documents",
 };
 
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
