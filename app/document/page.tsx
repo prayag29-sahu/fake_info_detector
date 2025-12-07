@@ -1,39 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
-// // app/document/page.tsx
-// "use client";
-// import React from "react";
-// import Link from "next/link";
-// import { ArrowLeft, FileCheck } from "lucide-react";
-
-// export default function DocumentPage() {
-//     return (
-//         <div>
-//             <Link href="/dashboard" className="text-blue-600 mb-6 inline-block"><ArrowLeft className="w-4 h-4 inline mr-1" /> Back to Dashboard</Link>
-
-//             <h1 className="text-3xl font-bold mb-2">Document Verify</h1>
-//             <p className="text-gray-600 dark:text-gray-400 mb-8">Upload documents to check authenticity</p>
-
-//             <div className="grid lg:grid-cols-2 gap-6">
-//                 <div className="bg-white border rounded-xl p-6 dark:bg-gray-800 dark:border-gray-700">
-//                     <h2 className="text-xl font-bold mb-4">Upload Document</h2>
-//                     <div className="border-2 border-dashed rounded-lg p-12 text-center dark:border-gray-600 dark:bg-gray-700">
-//                         <FileCheck className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-//                         <p className="font-medium mb-2">Drag & Drop document</p>
-//                         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">PDF, JPG, PNG</p>
-//                         <button className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold">Choose File</button>
-//                     </div>
-//                     <button className="w-full mt-4 px-6 py-3 rounded-lg bg-gradient-to-r from-green-600 to-teal-500 text-white font-semibold">Analyze Document</button>
-//                 </div>
-
-//                 <div className="bg-white border rounded-xl p-6 dark:bg-gray-800 dark:border-gray-700">
-//                     <h2 className="text-xl font-bold mb-4">Detection Result</h2>
-//                     <div className="flex items-center justify-center h-64 text-gray-400">Upload a document to start analysis</div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
 
 
 "use client";
