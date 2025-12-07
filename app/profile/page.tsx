@@ -39,7 +39,8 @@ export default function ProfilePage() {
                                 alt="Profile"
                                 className="w-32 h-32 rounded-full border-4 border-gray-200 dark:border-gray-700 shadow-md"
                             />
-                            <button className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 transition">
+                            <button
+                            title="profile picture"    className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 transition">
                                 <Camera className="w-4 h-4" />
                             </button>
                         </div>
@@ -75,6 +76,7 @@ export default function ProfilePage() {
                         <div>
                             <label className="font-medium block mb-2">Full Name</label>
                             <input
+                                placeholder="Enter your Full Name"
                                 type="text"
                                 disabled={!editing}
                                 value={name}
@@ -88,6 +90,7 @@ export default function ProfilePage() {
                         <div>
                             <label className="font-medium block mb-2">Email Address</label>
                             <input
+                                placeholder="Enter your Email Address"
                                 type="email"
                                 disabled={!editing}
                                 value={email}
