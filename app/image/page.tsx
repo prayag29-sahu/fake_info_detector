@@ -1,39 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
-// // app/image/page.tsx
-// "use client";
-// import React from "react";
-// import Link from "next/link";
-// import { ArrowLeft, Upload } from "lucide-react";
 
-// export default function ImagePage() {
-//     return (
-//         <div>
-//             <Link href="/dashboard" className="text-blue-600 mb-6 inline-block"><ArrowLeft className="w-4 h-4 inline mr-1" /> Back to Dashboard</Link>
-
-//             <h1 className="text-3xl font-bold mb-2">Image Detection</h1>
-//             <p className="text-gray-600 dark:text-gray-400 mb-8">Identify manipulated, edited, or AI-generated images</p>
-
-//             <div className="grid lg:grid-cols-2 gap-6">
-//                 <div className="bg-white border rounded-xl p-6 dark:bg-gray-800 dark:border-gray-700">
-//                     <h2 className="text-xl font-bold mb-4">Upload Image</h2>
-//                     <div className="border-2 border-dashed rounded-lg p-12 text-center dark:border-gray-600 dark:bg-gray-700">
-//                         <Upload className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-//                         <p className="font-medium mb-2">Drag & Drop Image</p>
-//                         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">or click to browse</p>
-//                         <button className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold">Choose File</button>
-//                     </div>
-//                     <button className="w-full mt-4 px-6 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold">Analyze Image</button>
-//                 </div>
-
-//                 <div className="bg-white border rounded-xl p-6 dark:bg-gray-800 dark:border-gray-700">
-//                     <h2 className="text-xl font-bold mb-4">Detection Result</h2>
-//                     <div className="flex items-center justify-center h-64 text-gray-400">Upload an image to start analysis</div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
 
 
 "use client";
