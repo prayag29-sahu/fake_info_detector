@@ -224,7 +224,7 @@ export default function Navbar() {
                             {/* MENU BUTTON */}
                             <button
                                 title="open sidebar"
-                                className="p-2 rounded-md border dark:border-gray-700 dark:bg-gray-800 bg-gray-100"
+                                className="p-2 -ml-20 mr-20 rounded-md border dark:border-gray-700 dark:bg-gray-800 bg-gray-100"
                                 onClick={() => setOpen(true)}
                             >
                                 <Menu className="w-6 h-6" />
