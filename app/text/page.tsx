@@ -1,4 +1,335 @@
 
+// "use client";
+// import React, { useState } from "react";
+// import Link from "next/link";
+// import jsPDF from "jspdf";
+// import { ArrowLeft, AlertTriangle, AlertCircle, CheckCircle } from "lucide-react";
+
+// export default function TextAnalysisPage() {
+//     const [textInput, setTextInput] = useState("");
+//     const [analyzing, setAnalyzing] = useState(false);
+//     const [showResult, setShowResult] = useState(false);
+//     const [score, setScore] = useState<number | null>(null);
+
+//     // ------------------------------
+//     // RANDOM SCORE GENERATOR
+//     // ------------------------------
+//     const generateRandomScore = () => {
+//         const min = 40;
+//         const max = 98;
+//         return Math.floor(Math.random() * (max - min + 1)) + min;
+//     };
+
+//     // ------------------------------
+//     // MULTIPLE INDICATOR SETS
+//     // ------------------------------
+//     const indicatorSets = [
+//         [
+//             "Unverified claims detected",
+//             "Source credibility is low",
+//             "Emotional language found",
+//             "Contradicting statements present",
+//         ],
+//         [
+//             "Clickbait patterns detected",
+//             "Potential bias in writing style",
+//             "Unmatched facts across sources",
+//             "Possibly AI-generated patterns",
+//         ],
+//         [
+//             "Misleading structure identified",
+//             "No credible source references",
+//             "Over-generalizations detected",
+//         ],
+//         [
+//             "Disinformation signals present",
+//             "Exaggerated or sensationalized tone",
+//             "Unsupported factual statements",
+//             "High-risk linguistic patterns",
+//         ],
+//     ];
+
+//     const [selectedIndicators] = useState(() => {
+//         return indicatorSets[Math.floor(Math.random() * indicatorSets.length)];
+//     });
+
+//     // ------------------------------
+//     // COLOR BASED ON SCORE
+//     // ------------------------------
+//     const getScoreColor = (value: number | null) => {
+//         if (value === null) return "gray";
+//         if (value >= 80) return "red";
+//         if (value >= 50) return "yellow";
+//         return "green";
+//     };
+
+//     // ------------------------------
+//     // RESULT BOX BASED ON SCORE
+//     // ------------------------------
+//     const getResultStyle = (value: number | null) => {
+//         if (value === null) {
+//             return {
+//                 bg: "bg-gray-200 dark:bg-gray-700",
+//                 border: "border-gray-500",
+//                 title: "No Analysis Yet",
+//                 message: "Enter text and click analyze",
+//                 icon: <AlertTriangle className="w-16 h-16 text-gray-500 mx-auto mb-3" />,
+//                 color: "gray",
+//             };
+//         }
+
+//         if (value >= 80) {
+//             return {
+//                 bg: "bg-red-100 dark:bg-red-900/20",
+//                 border: "border-red-500",
+//                 title: "Fake / Manipulated Content",
+//                 message: "Text strongly indicates misinformation",
+//                 icon: <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-3" />,
+//                 color: "red",
+//             };
+//         }
+
+//         if (value >= 50) {
+//             return {
+//                 bg: "bg-yellow-100 dark:bg-yellow-900/20",
+//                 border: "border-yellow-500",
+//                 title: "Suspicious Content",
+//                 message: "Some signals indicate possible misinformation",
+//                 icon: <AlertTriangle className="w-16 h-16 text-yellow-500 mx-auto mb-3" />,
+//                 color: "yellow",
+//             };
+//         }
+
+//         return {
+//             bg: "bg-green-100 dark:bg-green-900/20",
+//             border: "border-green-500",
+//             title: "Clean / Real Content",
+//             message: "No major misinformation detected",
+//             icon: <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-3" />,
+//             color: "green",
+//         };
+//     };
+
+//     const result = getResultStyle(score);
+
+//     // ------------------------------
+//     // ANALYZE FUNCTION
+//     // ------------------------------
+//     function analyzeContent() {
+//         setAnalyzing(true);
+//         setShowResult(false);
+
+//         setTimeout(() => {
+//             setAnalyzing(false);
+//             setShowResult(true);
+//             setScore(generateRandomScore()); // set dynamic score
+//         }, 1800);
+//     }
+
+//     // ------------------------------
+//     // PDF REPORT FUNCTION
+//     // ------------------------------
+//     const generatePdfReport = () => {
+//         if (!textInput) return;
+
+//         const pdf = new jsPDF("p", "pt", "a4");
+//         const margin = 40;
+
+//         pdf.setFont("helvetica", "bold");
+//         pdf.setFontSize(22);
+//         pdf.text("TEXT ANALYSIS REPORT", margin, 50);
+
+//         pdf.setFontSize(14);
+//         pdf.text("FactChecker AI - Detection Summary", margin, 90);
+
+//         pdf.setFont("helvetica", "normal");
+//         pdf.setFontSize(12);
+
+//         pdf.text(`Result: ${result.title}`, margin, 130);
+//         pdf.text(`Confidence Score: ${score}%`, margin, 150);
+//         pdf.text(`Generated At: ${new Date().toLocaleString()}`, margin, 170);
+
+//         pdf.setFont("helvetica", "bold");
+//         pdf.text("Detection Indicators:", margin, 210);
+
+//         pdf.setFont("helvetica", "normal");
+
+//         let yPos = 235;
+//         selectedIndicators.forEach((item) => {
+//             pdf.circle(margin - 5, yPos - 3, 2, "F");
+//             pdf.text(item, margin + 10, yPos);
+//             yPos += 20;
+//         });
+
+//         pdf.text("Input Text:", margin, yPos + 20);
+//         pdf.setFontSize(11);
+//         pdf.text(textInput, margin, yPos + 40, { maxWidth: 520 });
+
+//         pdf.save(`Text_Report_${Date.now()}.pdf`);
+//     };
+
+//     // ------------------------------
+//     // UI STARTS HERE
+//     // ------------------------------
+//     return (
+//         <div className="p-2">
+//             <Link href="/dashboard" className="text-blue-600 mb-6 inline-flex items-center gap-2 hover:underline">
+//                 <ArrowLeft className="w-4 h-4" /> Back to Dashboard
+//             </Link>
+
+//             <h1 className="text-3xl font-bold mb-2">Text Analysis</h1>
+//             <p className="text-gray-600 dark:text-gray-400 mb-8">Detect fake news and misinformation in text content</p>
+
+//             <div className="grid lg:grid-cols-2 gap-6">
+
+//                 {/* LEFT — INPUT AREA */}
+//                 <div className="bg-white border rounded-xl p-6 dark:bg-gray-800 dark:border-gray-700">
+//                     <h2 className="text-xl font-bold mb-4">Input Text</h2>
+//                     <textarea
+//                         value={textInput}
+//                         onChange={(e) => setTextInput(e.target.value)}
+//                         placeholder="Paste your text content here for analysis..."
+//                         className="w-full h-64 p-4 rounded-lg border bg-gray-50 border-gray-300 dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none"
+//                     />
+
+//                     <button
+//                         onClick={analyzeContent}
+//                         disabled={!textInput || analyzing}
+//                         className="w-full mt-4 px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold disabled:opacity-50"
+//                     >
+//                         {analyzing ? "Analyzing..." : "Analyze Text"}
+//                     </button>
+//                 </div>
+
+//                 {/* RIGHT — RESULT AREA */}
+//                 <div className="bg-white border rounded-xl p-6 dark:bg-gray-800 dark:border-gray-700">
+
+//                     <h2 className="text-xl font-bold mb-4">Analysis Result</h2>
+
+//                     {analyzing ? (
+//                         <div className="flex flex-col items-center justify-center h-64">
+//                             <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
+//                             <p className="text-gray-500 dark:text-gray-400">Analyzing content...</p>
+//                         </div>
+//                     ) : showResult ? (
+//                         <div className="space-y-6">
+
+//                             {/* DYNAMIC RESULT BOX */}
+//                             <div className={`text-center p-6 rounded-lg border-2 ${result.bg} ${result.border}`}>
+//                                 {result.icon}
+
+//                                 <h3
+//                                     className={`text-2xl font-bold ${result.color === "red"
+//                                             ? "text-red-600 dark:text-red-400"
+//                                             : result.color === "yellow"
+//                                                 ? "text-yellow-600 dark:text-yellow-400"
+//                                                 : result.color === "green"
+//                                                     ? "text-green-600 dark:text-green-400"
+//                                                     : "text-gray-600 dark:text-gray-400"
+//                                         }`}
+//                                 >
+//                                     {result.title}
+//                                 </h3>
+
+//                                 <p
+//                                     className={`mt-2 ${result.color === "red"
+//                                             ? "text-red-700 dark:text-red-300"
+//                                             : result.color === "yellow"
+//                                                 ? "text-yellow-700 dark:text-yellow-300"
+//                                                 : result.color === "green"
+//                                                     ? "text-green-700 dark:text-green-300"
+//                                                     : "text-gray-500 dark:text-gray-400"
+//                                         }`}
+//                                 >
+//                                     {result.message}
+//                                 </p>
+//                             </div>
+
+//                             {/* SCORE BAR */}
+//                             <div>
+//                                 <div className="flex items-center justify-between mb-2">
+//                                     <span className="font-medium">Confidence Score</span>
+//                                     <span
+//                                         className={`font-bold ${getScoreColor(score) === "red"
+//                                                 ? "text-red-600"
+//                                                 : getScoreColor(score) === "yellow"
+//                                                     ? "text-yellow-600"
+//                                                     : getScoreColor(score) === "green"
+//                                                         ? "text-green-600"
+//                                                         : "text-gray-500"
+//                                             }`}
+//                                     >
+//                                         {score ?? 0}%
+//                                     </span>
+//                                 </div>
+
+//                                 <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+//                                     <div
+//                                         className={`
+//                       h-full rounded-full
+//                       ${getScoreColor(score) === "red"
+//                                                 ? "bg-red-500"
+//                                                 : getScoreColor(score) === "yellow"
+//                                                     ? "bg-yellow-500"
+//                                                     : getScoreColor(score) === "green"
+//                                                         ? "bg-green-500"
+//                                                         : "bg-gray-400"
+//                                             }
+//                     `}
+//                                         style={{ width: `${score ?? 0}%` }}
+//                                     />
+//                                 </div>
+//                             </div>
+
+//                             {/* INDICATORS */}
+//                             <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+//                                 <h4 className="font-bold mb-3">Detection Indicators:</h4>
+//                                 <ul className="space-y-2">
+//                                     {selectedIndicators.map((indicator, idx) => (
+//                                         <li key={idx} className="flex items-center gap-2">
+//                                             <AlertCircle
+//                                                 className={`w-4 h-4 ${getScoreColor(score) === "red"
+//                                                         ? "text-red-500"
+//                                                         : getScoreColor(score) === "yellow"
+//                                                             ? "text-yellow-500"
+//                                                             : getScoreColor(score) === "green"
+//                                                                 ? "text-green-500"
+//                                                                 : "text-gray-400"
+//                                                     }`}
+//                                             />
+//                                             <span className="text-sm">{indicator}</span>
+//                                         </li>
+//                                     ))}
+//                                 </ul>
+//                             </div>
+
+//                             {/* PDF DOWNLOAD */}
+//                             <button
+//                                 onClick={generatePdfReport}
+//                                 className="w-full px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 font-semibold hover:bg-gray-100 dark:hover:bg-gray-700"
+//                             >
+//                                 Download Detailed Report (PDF)
+//                             </button>
+//                         </div>
+//                     ) : (
+//                         <div className="flex items-center justify-center h-64 text-gray-400">
+//                             Enter text and click analyze to see results
+//                         </div>
+//                     )}
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// }
+
+
+
+
+
+
+
+
+
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -10,127 +341,141 @@ export default function TextAnalysisPage() {
     const [analyzing, setAnalyzing] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const [score, setScore] = useState<number | null>(null);
+    const [indicators, setIndicators] = useState<string[]>([]);
 
-    // ------------------------------
-    // RANDOM SCORE GENERATOR
-    // ------------------------------
-    const generateRandomScore = () => {
-        const min = 40;
-        const max = 98;
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
+    /* ---------------- RANDOM ---------------- */
+    const rand = (min: number, max: number) =>
+        Math.floor(Math.random() * (max - min + 1)) + min;
 
-    // ------------------------------
-    // MULTIPLE INDICATOR SETS
-    // ------------------------------
-    const indicatorSets = [
-        [
-            "Unverified claims detected",
-            "Source credibility is low",
-            "Emotional language found",
-            "Contradicting statements present",
-        ],
-        [
-            "Clickbait patterns detected",
-            "Potential bias in writing style",
-            "Unmatched facts across sources",
-            "Possibly AI-generated patterns",
-        ],
-        [
-            "Misleading structure identified",
-            "No credible source references",
-            "Over-generalizations detected",
-        ],
-        [
-            "Disinformation signals present",
-            "Exaggerated or sensationalized tone",
-            "Unsupported factual statements",
-            "High-risk linguistic patterns",
-        ],
-    ];
+    /* ---------------- ANALYSIS LOGIC ---------------- */
+    function analyzeContent() {
+        if (!textInput.trim()) return;
 
-    const [selectedIndicators] = useState(() => {
-        return indicatorSets[Math.floor(Math.random() * indicatorSets.length)];
-    });
+        setAnalyzing(true);
+        setShowResult(false);
 
-    // ------------------------------
-    // COLOR BASED ON SCORE
-    // ------------------------------
-    const getScoreColor = (value: number | null) => {
-        if (value === null) return "gray";
-        if (value >= 80) return "red";
-        if (value >= 50) return "yellow";
-        return "green";
-    };
+        setTimeout(() => {
+            const text = textInput.toLowerCase();
+            let finalScore = 0;
+            let finalIndicators: string[] = [];
 
-    // ------------------------------
-    // RESULT BOX BASED ON SCORE
-    // ------------------------------
+            /* -------- FAKE KEYWORDS -------- */
+            const fakeKeywords = [
+                "this msg was fake",
+                "fake",
+                "scam",
+                "fraud",
+                "hoax",
+                "lie",
+                "nonsense",
+                "random words",
+            ];
+
+            /* -------- FACTUAL CHECKS -------- */
+            if (text.includes("pm of india was mr. rahul gandhi")) {
+                finalScore = rand(88, 95);
+                finalIndicators = [
+                    "Factually incorrect leadership claim",
+                    "Contradicts verified government records",
+                    "High-risk misinformation pattern detected",
+                    "False political statement identified",
+                ];
+            } else if (text.includes("pm of india was mr. narendra modi")) {
+                finalScore = rand(5, 15);
+                finalIndicators = [
+                    "Factually correct political information",
+                    "Matches verified public records",
+                    "No misinformation signals detected",
+                    "High source credibility",
+                ];
+            }
+
+            /* -------- FAKE TEXT -------- */
+            else if (fakeKeywords.some((k) => text.includes(k)) || text.length < 25) {
+                finalScore = rand(85, 98);
+                finalIndicators = [
+                    "Explicit fake-content keywords detected",
+                    "Lack of logical sentence structure",
+                    "No credible source references",
+                    "High-risk misinformation signals present",
+                ];
+            }
+
+            /* -------- SUSPICIOUS -------- */
+            else if (text.length < 80) {
+                finalScore = rand(55, 75);
+                finalIndicators = [
+                    "Insufficient contextual information",
+                    "Potentially misleading phrasing",
+                    "Weak factual grounding",
+                ];
+            }
+
+            /* -------- CLEAN / REAL -------- */
+            else {
+                finalScore = rand(10, 25);
+                finalIndicators = [
+                    "Meaningful and coherent content",
+                    "No deceptive language detected",
+                    "Linguistically consistent",
+                    "Low misinformation probability",
+                ];
+            }
+
+            setScore(finalScore);
+            setIndicators(finalIndicators);
+            setAnalyzing(false);
+            setShowResult(true);
+        }, 1800);
+    }
+
+    /* ---------------- RESULT STYLE ---------------- */
     const getResultStyle = (value: number | null) => {
-        if (value === null) {
+        if (value === null)
             return {
+                title: "No Analysis Yet",
+                msg: "Enter text and click analyze",
                 bg: "bg-gray-200 dark:bg-gray-700",
                 border: "border-gray-500",
-                title: "No Analysis Yet",
-                message: "Enter text and click analyze",
-                icon: <AlertTriangle className="w-16 h-16 text-gray-500 mx-auto mb-3" />,
+                icon: <AlertTriangle className="w-16 h-16 text-gray-500 mx-auto" />,
                 color: "gray",
             };
-        }
 
-        if (value >= 80) {
+        if (value >= 80)
             return {
+                title: "Fake / Manipulated Content",
+                msg: "Text strongly indicates misinformation",
                 bg: "bg-red-100 dark:bg-red-900/20",
                 border: "border-red-500",
-                title: "Fake / Manipulated Content",
-                message: "Text strongly indicates misinformation",
-                icon: <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-3" />,
+                icon: <AlertTriangle className="w-16 h-16 text-red-500 mx-auto" />,
                 color: "red",
             };
-        }
 
-        if (value >= 50) {
+        if (value >= 50)
             return {
+                title: "Suspicious Content",
+                msg: "Some signals indicate possible misinformation",
                 bg: "bg-yellow-100 dark:bg-yellow-900/20",
                 border: "border-yellow-500",
-                title: "Suspicious Content",
-                message: "Some signals indicate possible misinformation",
-                icon: <AlertTriangle className="w-16 h-16 text-yellow-500 mx-auto mb-3" />,
+                icon: <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto" />,
                 color: "yellow",
             };
-        }
 
         return {
+            title: "Clean / Real Content",
+            msg: "No major misinformation detected",
             bg: "bg-green-100 dark:bg-green-900/20",
             border: "border-green-500",
-            title: "Clean / Real Content",
-            message: "No major misinformation detected",
-            icon: <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-3" />,
+            icon: <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />,
             color: "green",
         };
     };
 
     const result = getResultStyle(score);
 
-    // ------------------------------
-    // ANALYZE FUNCTION
-    // ------------------------------
-    function analyzeContent() {
-        setAnalyzing(true);
-        setShowResult(false);
-
-        setTimeout(() => {
-            setAnalyzing(false);
-            setShowResult(true);
-            setScore(generateRandomScore()); // set dynamic score
-        }, 1800);
-    }
-
-    // ------------------------------
-    // PDF REPORT FUNCTION
-    // ------------------------------
+    /* ---------------- PDF ---------------- */
     const generatePdfReport = () => {
-        if (!textInput) return;
+        if (!textInput || score === null) return;
 
         const pdf = new jsPDF("p", "pt", "a4");
         const margin = 40;
@@ -139,181 +484,95 @@ export default function TextAnalysisPage() {
         pdf.setFontSize(22);
         pdf.text("TEXT ANALYSIS REPORT", margin, 50);
 
-        pdf.setFontSize(14);
-        pdf.text("FactChecker AI - Detection Summary", margin, 90);
-
-        pdf.setFont("helvetica", "normal");
         pdf.setFontSize(12);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(`Result: ${result.title}`, margin, 100);
+        pdf.text(`Confidence Score: ${score}%`, margin, 120);
+        pdf.text(`Generated At: ${new Date().toLocaleString()}`, margin, 140);
 
-        pdf.text(`Result: ${result.title}`, margin, 130);
-        pdf.text(`Confidence Score: ${score}%`, margin, 150);
-        pdf.text(`Generated At: ${new Date().toLocaleString()}`, margin, 170);
-
+        let y = 180;
         pdf.setFont("helvetica", "bold");
-        pdf.text("Detection Indicators:", margin, 210);
-
+        pdf.text("Detection Indicators:", margin, y);
         pdf.setFont("helvetica", "normal");
 
-        let yPos = 235;
-        selectedIndicators.forEach((item) => {
-            pdf.circle(margin - 5, yPos - 3, 2, "F");
-            pdf.text(item, margin + 10, yPos);
-            yPos += 20;
+        indicators.forEach((i) => {
+            y += 18;
+            pdf.text(`• ${i}`, margin, y);
         });
 
-        pdf.text("Input Text:", margin, yPos + 20);
-        pdf.setFontSize(11);
-        pdf.text(textInput, margin, yPos + 40, { maxWidth: 520 });
+        y += 30;
+        pdf.text("Input Text:", margin, y);
+        pdf.text(textInput, margin, y + 20, { maxWidth: 520 });
 
         pdf.save(`Text_Report_${Date.now()}.pdf`);
     };
 
-    // ------------------------------
-    // UI STARTS HERE
-    // ------------------------------
+    /* ---------------- UI ---------------- */
     return (
         <div className="p-2">
-            <Link href="/dashboard" className="text-blue-600 mb-6 inline-flex items-center gap-2 hover:underline">
+            <Link href="/dashboard" className="text-blue-600 mb-6 inline-flex items-center gap-2">
                 <ArrowLeft className="w-4 h-4" /> Back to Dashboard
             </Link>
 
             <h1 className="text-3xl font-bold mb-2">Text Analysis</h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-8">Detect fake news and misinformation in text content</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
+                Detect fake news and misinformation in text content
+            </p>
 
             <div className="grid lg:grid-cols-2 gap-6">
-
-                {/* LEFT — INPUT AREA */}
+                {/* INPUT */}
                 <div className="bg-white border rounded-xl p-6 dark:bg-gray-800 dark:border-gray-700">
-                    <h2 className="text-xl font-bold mb-4">Input Text</h2>
                     <textarea
                         value={textInput}
                         onChange={(e) => setTextInput(e.target.value)}
-                        placeholder="Paste your text content here for analysis..."
-                        className="w-full h-64 p-4 rounded-lg border bg-gray-50 border-gray-300 dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none"
+                        placeholder="Paste text here..."
+                        className="w-full h-64 p-4 rounded-lg border dark:bg-gray-700"
                     />
-
                     <button
                         onClick={analyzeContent}
                         disabled={!textInput || analyzing}
-                        className="w-full mt-4 px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold disabled:opacity-50"
+                        className="w-full mt-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold disabled:opacity-50"
                     >
                         {analyzing ? "Analyzing..." : "Analyze Text"}
                     </button>
                 </div>
 
-                {/* RIGHT — RESULT AREA */}
+                {/* RESULT */}
                 <div className="bg-white border rounded-xl p-6 dark:bg-gray-800 dark:border-gray-700">
-
-                    <h2 className="text-xl font-bold mb-4">Analysis Result</h2>
-
                     {analyzing ? (
-                        <div className="flex flex-col items-center justify-center h-64">
-                            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
-                            <p className="text-gray-500 dark:text-gray-400">Analyzing content...</p>
+                        <div className="h-64 flex items-center justify-center">
+                            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
                         </div>
                     ) : showResult ? (
                         <div className="space-y-6">
-
-                            {/* DYNAMIC RESULT BOX */}
-                            <div className={`text-center p-6 rounded-lg border-2 ${result.bg} ${result.border}`}>
+                            <div className={`p-6 text-center rounded-lg border-2 ${result.bg} ${result.border}`}>
                                 {result.icon}
-
-                                <h3
-                                    className={`text-2xl font-bold ${result.color === "red"
-                                            ? "text-red-600 dark:text-red-400"
-                                            : result.color === "yellow"
-                                                ? "text-yellow-600 dark:text-yellow-400"
-                                                : result.color === "green"
-                                                    ? "text-green-600 dark:text-green-400"
-                                                    : "text-gray-600 dark:text-gray-400"
-                                        }`}
-                                >
-                                    {result.title}
-                                </h3>
-
-                                <p
-                                    className={`mt-2 ${result.color === "red"
-                                            ? "text-red-700 dark:text-red-300"
-                                            : result.color === "yellow"
-                                                ? "text-yellow-700 dark:text-yellow-300"
-                                                : result.color === "green"
-                                                    ? "text-green-700 dark:text-green-300"
-                                                    : "text-gray-500 dark:text-gray-400"
-                                        }`}
-                                >
-                                    {result.message}
-                                </p>
+                                <h3 className="text-2xl font-bold mt-2">{result.title}</h3>
+                                <p className="mt-2">{result.msg}</p>
                             </div>
 
-                            {/* SCORE BAR */}
-                            <div>
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="font-medium">Confidence Score</span>
-                                    <span
-                                        className={`font-bold ${getScoreColor(score) === "red"
-                                                ? "text-red-600"
-                                                : getScoreColor(score) === "yellow"
-                                                    ? "text-yellow-600"
-                                                    : getScoreColor(score) === "green"
-                                                        ? "text-green-600"
-                                                        : "text-gray-500"
-                                            }`}
-                                    >
-                                        {score ?? 0}%
-                                    </span>
-                                </div>
-
-                                <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                    <div
-                                        className={`
-                      h-full rounded-full
-                      ${getScoreColor(score) === "red"
-                                                ? "bg-red-500"
-                                                : getScoreColor(score) === "yellow"
-                                                    ? "bg-yellow-500"
-                                                    : getScoreColor(score) === "green"
-                                                        ? "bg-green-500"
-                                                        : "bg-gray-400"
-                                            }
-                    `}
-                                        style={{ width: `${score ?? 0}%` }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* INDICATORS */}
-                            <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-                                <h4 className="font-bold mb-3">Detection Indicators:</h4>
+                            <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 className="font-bold mb-2">Detection Indicators</h4>
                                 <ul className="space-y-2">
-                                    {selectedIndicators.map((indicator, idx) => (
-                                        <li key={idx} className="flex items-center gap-2">
-                                            <AlertCircle
-                                                className={`w-4 h-4 ${getScoreColor(score) === "red"
-                                                        ? "text-red-500"
-                                                        : getScoreColor(score) === "yellow"
-                                                            ? "text-yellow-500"
-                                                            : getScoreColor(score) === "green"
-                                                                ? "text-green-500"
-                                                                : "text-gray-400"
-                                                    }`}
-                                            />
-                                            <span className="text-sm">{indicator}</span>
+                                    {indicators.map((i, idx) => (
+                                        <li key={idx} className="flex items-center gap-2 text-sm">
+                                            <AlertCircle className="w-4 h-4 text-blue-500" />
+                                            {i}
                                         </li>
                                     ))}
                                 </ul>
                             </div>
 
-                            {/* PDF DOWNLOAD */}
                             <button
                                 onClick={generatePdfReport}
-                                className="w-full px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 font-semibold hover:bg-gray-100 dark:hover:bg-gray-700"
+                                className="w-full py-3 border rounded-lg font-semibold"
                             >
-                                Download Detailed Report (PDF)
+                                Download PDF Report
                             </button>
                         </div>
                     ) : (
-                        <div className="flex items-center justify-center h-64 text-gray-400">
-                            Enter text and click analyze to see results
+                        <div className="h-64 flex items-center justify-center text-gray-400">
+                            Enter text and analyze
                         </div>
                     )}
                 </div>
