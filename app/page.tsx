@@ -1,9 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable jsx-a11y/alt-text */
-
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FileText,
   Image as ImgIcon,
@@ -20,7 +20,27 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
+import { getToken } from "@/lib/auth";
+
 export default function Home() {
+  const router = useRouter();
+
+  // 🔐 auth state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    const token = getToken();
+    setIsLoggedIn(!!token);
+    setChecked(true);
+  }, []);
+
+  const handleStart = () => {
+    if (!checked) return;
+    if (isLoggedIn) router.push("/dashboard");
+    else router.push("/login");
+  };
+
   const cardClass =
     "bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all dark:bg-gray-800 dark:border-gray-700";
 
@@ -29,8 +49,9 @@ export default function Home() {
     { icon: <ImgIcon />, title: "Image Detection", href: "/image" },
     { icon: <Video />, title: "Video Analysis", href: "/video" },
     { icon: <Link2 />, title: "URL Scanner", href: "/url" },
-    { icon: <FileCheck />, title: "Document Verify", href: "/document" },
+    { icon: <FileCheck />, title: "Document Verify", href: "/document" }, // fixed
   ];
+
 
   return (
     <div className="min-h-screen">
@@ -56,12 +77,14 @@ export default function Home() {
             </p>
 
             <div className="flex gap-4 justify-center">
-              <Link
-                href="/dashboard"
+
+              {/*  AUTH BUTTON */}
+              <button
+                onClick={handleStart}
                 className="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold flex items-center gap-2 shadow-lg"
               >
                 Start Verification <ChevronRight className="w-5 h-5" />
-              </Link>
+              </button>
 
               <button className="px-8 py-4 rounded-xl bg-white border font-semibold flex items-center gap-2 dark:bg-gray-800 dark:border-gray-700">
                 <Play className="w-5 h-5" /> Watch Demo
